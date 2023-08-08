@@ -1,0 +1,89 @@
+/*
+ * Copyright (C) 2017 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+//apply plugin: 'com.android.application'
+//apply plugin: 'kotlin-android'
+
+plugins {
+    id 'com.android.application' version '7.1.2' apply false
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.example.android.wearable.complicationsdataprovider"
+
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
+    }
+
+    lintOptions {
+        warningsAsErrors true
+        ignore "OldTargetApi" // API >30 doesn't exist for Wear OS
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
+}
+
+dependencies {
+    def composeBom = platform(libs.androidx.compose.bom)
+    implementation composeBom
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.coroutines.play.services
+    implementation libs.androidx.activity.compose
+    implementation libs.compose.ui.tooling
+    implementation libs.compose.foundation
+    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.wear.compose.material
+    implementation libs.wear.compose.foundation
+    implementation libs.playservices.wearable
+    implementation "androidx.datastore:datastore-preferences:$rootProject.datastorePreferenceVersion"
+    implementation "androidx.wear.watchface:watchface-complications-data-source-ktx:$rootProject.watchfaceComplicationsDataStoreKTXVersion"
+//    implementation "androidx.core:core-ktx:$rootProject.coreKtxVersion"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutinesAndroidVersion"
+//    implementation "androidx.datastore:datastore-preferences:$rootProject.datastorePreferenceVersion"
+//    implementation "androidx.wear.watchface:watchface-complications-data-source-ktx:$rootProject.watchfaceComplicationsDataStoreKTXVersion"
+//    implementation "com.google.android.gms:play-services-wearable:17.1.0"
+//    implementation "com.google.gms:google-services:4.0.1"
+}
